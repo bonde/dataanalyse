@@ -31,7 +31,7 @@ pdfauthor={\myauthor}
 \subsection*{Spørgsmål 1}
 Vi har givet signalet $g[x]=[1_{\centerdot}, 2, 3, 2, 1, 0, -1, -2]$ og
 filteret $f[x]=[1_{\centerdot}, -1]$. Prikken indikerer starten af en
-periode. Vi vil gerne konstruere $g_e(x)$ og $f_e(x)$.I henhold til
+periode. Vi vil gerne konstruere $g_e(x)$ og $f_e(x)$. I henhold til
 \citep[s. 15]{soereninout} har vi at $A = 2$ og $B = 8$, dvs. blot
 længden af hhv. filteret og signalet.
 
@@ -75,7 +75,7 @@ signalet. Da foldningen $(f \star g)(x) = (g \star f)(x)$ tager jeg
 udgangspunkt i at man kan spejle filteret og lade dette køre over
 signalet.
 
-\begin{table}
+\begin{table}[t]
     \begin{equation}
         \rowcolors[]{1}{gray!20}{gray!10}
         \begin{array}{c|cccccccccccc|c}
@@ -102,9 +102,13 @@ signalet.
 
 \subsection*{Spørgsmål 2}
 Givet signalet $f[x] = [1, 0, 1, 0]$ ønsker vi at beregne
-Fouriertransformationen.
+Fouriertransformationen. En meget naiv løsning er blevet implementeret i
+MATLAB som kontrol. Denne følger definitionen givet i \citep[ligning
+2.14, s. 16]{soereninout}. Funktionen \texttt{DANaiveFourier.m} er
+vedlagt som bilag.
 
-For $u = 0$ har vi at $e^{-2\pi i \cdot 0/4} = e^{0} = 1$
+For $u = 0$ har vi at $e^{-2\pi i \cdot 0/4} = e^{0} = 1$ for alle
+værdier af $x$
 \begin{equation}
     \mathcal{F}(0) = \frac{1}{4}(1 + 0 + 1 + 0) = \frac{1}{2}
 \end{equation}
@@ -145,10 +149,36 @@ og
     \mathcal{F}(3) = \frac{1}{4}(1 + 0 - 1 + 0) = 0
 \end{equation}
 
-Resultatet er altså at $\mathcal{F} = [\frac{1}{2}, 0,
-\frac{1}{2}, 0]$.
+\begin{lstlisting}[caption={Fouriertransformation i MATLAB
+    (kommandoprompt)}, captionpos=b,
+    label={fft_matlab}, float=t, numbers=none]
+>> fft([1 0 1 0])
+
+ans =
+
+     2     0     2     0
+
+\end{lstlisting}
+
+Resultatet er altså at $\mathcal{F} = [\frac{1}{2}, 0, \frac{1}{2}, 0]$.
+Dog som vist i kodeboks \ref{fft_matlab} findes et andet resultat hvis
+vi bruger MATLABs indbyggede funktion \texttt{fft}. Dog ses det let at
+man i MATLAB \emph{ikke} dividerer med $N$ når transformationen
+beregnes. Et hurtigt opslag i MATLABs dokumentation bekræfter dette.
 
 \subsection*{Spørgsmål 3}
+
+\begin{lstlisting}[caption={Invers Fouriertransformation i MATLAB og
+    (kommandoprompt)}, captionpos=b,
+    label={ifft_matlab}, float=t]
+>> close all;                               % Good meassure
+>> A = 10; B = 20; T = 4;                   % Init parameters
+>> F = DAImpulses(A, B, T);                 % Create impulses
+>> f = real(ifft(F));                       % Inverse Fourier transform
+>> figure(1); plot(f);                      % Plot inverse transform
+>> figure(2); stem(F);                      % Plot impulses
+
+\end{lstlisting}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -163,10 +193,15 @@ Resultatet er altså at $\mathcal{F} = [\frac{1}{2}, 0,
     showstringspaces=false, numbers=left, stepnumber=1,
     numberstyle=\tiny, frame=none}
 \section{Kildekode}
-Hele kildekoden kan findes i mit git-repository på \repository{}.
+Kildekoden er tilgængelig i mit git-repository på \repository{}. Bemærk
+at prefikset \texttt{DA} står for ``DataAnalyse'' og blot er til for at
+undgå eventuelle sammenstød med indbyggede funktioner i MATLAB.
 
-%\subsection{assignment81.m}
-%\lstinputlisting{../src/assignment81.m}
+\subsection{DANaiveFourier.m}
+\lstinputlisting{../src/DANaiveFourier.m}
+
+\subsection{DAImpulses.m}
+\lstinputlisting{../src/DAImpulses.m}
 
 \end{document}
 
