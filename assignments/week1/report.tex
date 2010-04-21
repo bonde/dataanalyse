@@ -1,0 +1,173 @@
+\documentclass[a4paper, 10pt, danish, final]{article}
+\usepackage{bonde}
+
+\def\mytitle{Dataanalyse 2010}
+\def\mysubtitle{Aflevering af ugeopgave 1}
+\def\myauthor{Ulrik Bonde}
+\def\mymail{\mailto{bonde@diku.dk}}
+\def\mydate{\today}
+\def\repository{\url{http://github.com/bonde/dataanalyse}}
+
+\title{\mytitle}
+\subtitle{\mysubtitle}
+
+\author{\myauthor{} - \mymail}
+\date{\mydate}
+
+\hypersetup{
+colorlinks,%
+citecolor=black,%
+filecolor=black,%
+linkcolor=black,%
+urlcolor=black,%
+bookmarksopen=false,
+pdftitle={\mytitle{} - \mysubtitle},
+pdfauthor={\myauthor}
+}
+
+\begin{document}
+\maketitle
+
+\subsection*{Spørgsmål 1}
+Vi har givet signalet $g[x]=[1_{\centerdot}, 2, 3, 2, 1, 0, -1, -2]$ og
+filteret $f[x]=[1_{\centerdot}, -1]$. Prikken indikerer starten af en
+periode. Vi vil gerne konstruere $g_e(x)$ og $f_e(x)$.I henhold til
+\citep[s. 15]{soereninout} har vi at $A = 2$ og $B = 8$, dvs. blot
+længden af hhv. filteret og signalet.
+
+\begin{equation}
+    f_e(x) = \left\{ \begin{array}{l l l}
+        f(x) & \mbox{hvis} & 0 \leq x \leq A - 1\\
+        0 & \mbox{hvis} & A \leq x \leq M - 1
+    \end{array}\right.
+\end{equation}
+
+\begin{equation}
+    g_e(x) = \left\{ \begin{array}{l l l}
+        g(x) & \mbox{hvis} & 0 \leq x \leq A - 1\\
+        0 & \mbox{hvis} & A \leq x \leq M - 1
+    \end{array}\right.
+\end{equation}
+hvor
+\begin{align}
+    M & \geq A + B - 1\nonumber\\
+    & \geq  2 + 8 - 1\\
+    & \geq  9\nonumber
+\end{align}
+$M$ er ligeledes den minimale længde af foldningen.
+
+Ved at bruge ovenstående på de originale signaler får vi
+\begin{equation}
+    f_e(x) = [1_{\centerdot}, -1, 0, 0, 0, 0, 0, 0, 0]
+\end{equation}
+og
+\begin{equation}
+    g_e(x) = [1_{\centerdot}, 2, 3, 2, 1, 0, -1, -2, 0]
+\end{equation}
+
+Vi spejler signalet $g_e(x)$ og får $g'_e(x) = [0, -2, -1, 0, 1, 2, 3,
+2, 1_{\centerdot}]$. Resultatet af foldningen $(f \star g)(x) = h[x] =
+[1_\centerdot, 1, 1, -1, -1, -1, -1, -1, 2]$ af længde 9.
+
+I tabel \ref{tabel_folding} ses hvorledes foldingen
+\emph{kan} udledes. I praksis finder jeg det forvirrende at spejle
+signalet. Da foldningen $(f \star g)(x) = (g \star f)(x)$ tager jeg
+udgangspunkt i at man kan spejle filteret og lade dette køre over
+signalet.
+
+\begin{table}
+    \begin{equation}
+        \rowcolors[]{1}{gray!20}{gray!10}
+        \begin{array}{c|cccccccccccc|c}
+            x & 0 & -2 & -1 & 0 & 1 & 2 & 3 & 2 & 1_{\centerdot} & 0 & -2 & \cdots & h(x) = \sum_{\alpha \in \mathcal{N}}f(\alpha)g(x - \alpha)\\\hline
+            0&&&&&&&&&1_\centerdot & -1 &&& (1\cdot 1) + (-1 \cdot 0) = 1\\
+            1&&&&&&&&1_\centerdot & -1 &&&& (1\cdot 2) + (-1 \cdot 1) = 1\\
+            2&&&&&&&1_\centerdot & -1 &&&&& 3 - 2 = 1\\
+            3&&&&&&1_\centerdot & -1 &&&&&& 2 - 3 = -1\\
+            4&&&&&1_\centerdot & -1 &&&&&&& 1 - 2 = -1\\
+            5&&&&1_\centerdot & -1 &&&&&&&& 0 - 1 = -1\\
+            6&&&1_\centerdot & -1 &&&&&&&&& -1 + 0 = -1\\
+            7&&1_\centerdot & -1 &&&&&&&&&& -2 + 1 = -1\\
+            8&1_\centerdot & -1 &&&&&&&&&&& 0 + -(-2) = 2
+        \end{array}\nonumber
+    \end{equation}
+    \caption{Udregning af foldingen $(f \star g)(x)$. I tabellen ses
+    hvordan filteret rykker et trin til venstre for hver iteration, men
+    egentlig er det selve signalet som rykker til højre. Vi ser at
+    foldningen resulterer i signalet $h[x] = [1_\centerdot, 1, 1, -1,
+    -1, -1, -1, -1,
+    2]$.}
+    \label{tabel_folding}
+\end{table}
+
+\subsection*{Spørgsmål 2}
+Givet signalet $f[x] = [1, 0, 1, 0]$ ønsker vi at beregne
+Fouriertransformationen.
+
+For $u = 0$ har vi at $e^{-2\pi i \cdot 0/4} = e^{0} = 1$
+\begin{equation}
+    \mathcal{F}(0) = \frac{1}{4}(1 + 0 + 1 + 0) = \frac{1}{2}
+\end{equation}
+
+For $u = 1$ har vi
+\begin{align}
+    x = 0 & : e^{-2\pi i \cdot 1 \cdot 0/4} = 1\\
+    x = 1 & : e^{-2\pi i \cdot 1 \cdot 1/4} = i\\
+    x = 2 & : e^{-2\pi i \cdot 1 \cdot 2/4} = -1\\
+    x = 3 & : e^{-2\pi i \cdot 1 \cdot 3/4} = -i
+\end{align}
+og derved
+\begin{equation}
+    \mathcal{F}(1) = \frac{1}{4}(1 + 0 - 1 + 0) = 0
+\end{equation}
+
+For $u = 2$ har vi
+\begin{align}
+    x = 0 & : e^{-2\pi i \cdot 2 \cdot 0/4} = 1\\
+    x = 1 & : e^{-2\pi i \cdot 2 \cdot 1/4} = -1\\
+    x = 2 & : e^{-2\pi i \cdot 2 \cdot 2/4} = 1\\
+    x = 3 & : e^{-2\pi i \cdot 2 \cdot 3/4} = -1
+\end{align}
+og får derfor
+\begin{equation}
+    \mathcal{F}(2) = \frac{1}{4}(1 + 0 + 1 + 0) = \frac{1}{2}
+\end{equation}
+
+Endelig for $u = 3$ har vi
+\begin{align}
+    x = 0 & : e^{-2\pi i \cdot 3 \cdot 0/4} = 1\\
+    x = 1 & : e^{-2\pi i \cdot 3 \cdot 1/4} = -i\\
+    x = 2 & : e^{-2\pi i \cdot 3 \cdot 2/4} = -1\\
+    x = 3 & : e^{-2\pi i \cdot 3 \cdot 3/4} = i
+\end{align}
+og
+\begin{equation}
+    \mathcal{F}(3) = \frac{1}{4}(1 + 0 - 1 + 0) = 0
+\end{equation}
+
+Resultatet er altså at $\mathcal{F} = [\frac{1}{2}, 0,
+\frac{1}{2}, 0]$.
+
+\subsection*{Spørgsmål 3}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Formal stuff
+
+\bibliographystyle{abbrvnat}
+\bibliography{bibliography}
+%\addcontentsline{toc}{chapter}{Litteratur}
+
+\appendix
+\lstset{language=Matlab, basicstyle=\scriptsize,
+    showstringspaces=false, numbers=left, stepnumber=1,
+    numberstyle=\tiny, frame=none}
+\section{Kildekode}
+Hele kildekoden kan findes i mit git-repository på \repository{}.
+
+%\subsection{assignment81.m}
+%\lstinputlisting{../src/assignment81.m}
+
+\end{document}
+
+% vim: set tw=72 spell spelllang=da:
