@@ -161,22 +161,101 @@ ans =
 \end{lstlisting}
 
 Resultatet er altså at $\mathcal{F} = [\frac{1}{2}, 0, \frac{1}{2}, 0]$.
-Dog som vist i kodeboks \ref{fft_matlab} findes et andet resultat hvis
-vi bruger MATLABs indbyggede funktion \texttt{fft}. Dog ses det let at
-man i MATLAB \emph{ikke} dividerer med $N$ når transformationen
-beregnes. Et hurtigt opslag i MATLABs dokumentation bekræfter dette.
+Dog --- som vist i kodeboks \ref{fft_matlab} --- findes et andet
+resultat hvis vi bruger MATLABs indbyggede funktion \texttt{fft}. Dog
+ses det let at man i MATLAB \emph{ikke} dividerer summen
+$\sum_{x=0}^{N - 1}f(x)e^{-2\pi iux}$ med $N$ når
+transformationen beregnes. Et hurtigt opslag i MATLABs dokumentation
+bekræfter dette. Vi ville også få samme resultat hvis vi undlod at
+dividere med $N$.
 
 \subsection*{Spørgsmål 3}
 
+Vi betragter nu frekvenssignalet
+\begin{equation}
+    \mathbf{F}[u] = \left\{ \begin{array}{l l l}
+        A & \mbox{hvis} & u = 1\\
+        B & \mbox{hvis} & u = T + 1\\
+        B & \mbox{hvis} & u = N - T + 1\\
+        0 & \mbox{ellers} &
+    \end{array}\right.
+\end{equation}
+med $N = 64$. At vi har et frekvenssignal betyder at vi betragter
+Fouriertransformationen af et signal. Det er let at se at kun tre indeks
+i signalet vil have en værdi. Hvis vi sætter $A = 10, B = 20$ og
+$T = 4$ får vi frekvenssignalet vist i figur \ref{freq_10_20_4} og det
+tilsvarende signal i tidsdomænet i figur \ref{time_10_20_4}. Signalet i
+tidsdomænet er frembragt ved invers Fouriertransformation af
+$\mathbf{F}[u]$ som vist i kodeboks \ref{ifft_matlab}.
+
+\begin{figure}[!h]
+    \centering
+    \subfloat[Signal i
+    frekvensdomænet]{\label{freq_10_20_4}\includegraphics[angle=0,width=0.45\textwidth]{images/freq_10_20_4}\hspace{1em}}
+    \subfloat[Signal i tidsdomænet]{\label{time_10_20_4}\includegraphics[angle=0,width=0.45\textwidth]{images/time_10_20_4}}
+    \caption[]{To forskellige repræsentationer af signalet genereret ved
+    at sætte $A = 10, B = 20$ og $T = 4$.}
+    \label{signal_10_20_4}
+\end{figure}
+
+Signalet vist i figur \ref{freq_10_20_4} har origo i 1 og er derfor
+symmetrisk omkring dette indeks. Derved er frekvenssignalet periodisk.
+Man kan benytte den indbyggede funktion \texttt{fftshift} til at
+``flytte'' rundt i signalet således at origo er i midten. Egentlig tager
+man bare og bytter den ene halvdel af signalet med den anden, dvs.
+$F(1:N/2)$ flyttes til $F(N/2+1:end)$ og omvendt.
+
+Man kan uden videre ræsonnere sig frem til at parameteren $T$ har noget
+at gøre med frekvensen af signalet i tidsdomænet. Dog er det interessant
+at se, at $T$ angiver antallet af maksima, dvs. svingninger, i signalet.
+Dette er illustreret i figur \ref{signal_10_20_8_16}.
+
+På samme måde ved vi at vi har middelværdien af signalet i origo og
+parameteren $A$ regulerer denne. I figur \ref{signal_10_20_4} havde vi
+sat $A = 10$ og vi ser at midten af sinusbølgen ``har midtpunkt''
+(horisontalt) over x-aksen. Dette lyder forvirrende og det er derfor
+illustreret i figur \ref{signal_0_50_4}. Her set det, at når vi sætter $A = 0$ vil
+sinusbølgen have symmetriakse i på x-aksen. Endvidere viser figur
+\ref{signal_0_50_4} at parameteren $B$ er sinusbølgens amplitude.
+
+\begin{figure}[!h]
+    \centering
+    \subfloat[Signal i frekvensdomænet]{\label{freq_10_20_8}\includegraphics[angle=0,width=0.45\textwidth]{images/freq_10_20_8}\hspace{1em}}
+    \subfloat[Signal i tidsdomænet]{\label{time_10_20_8}\includegraphics[angle=0,width=0.45\textwidth]{images/time_10_20_8}}\\
+    \subfloat[Signal i frekvensdomænet]{\label{freq_10_20_16}\includegraphics[angle=0,width=0.45\textwidth]{images/freq_10_20_16}\hspace{1em}}
+    \subfloat[Signal i tidsdomænet]{\label{time_10_20_16}\includegraphics[angle=0,width=0.45\textwidth]{images/time_10_20_16}}
+    \caption[]{
+    \textbf{Øverst:} Signal genereret ved $A = 10, B = 20$ og $T = 8$
+    \textbf{Nederst:} Signal genereret ved $A = 10, B = 20$ og $T = 16$
+    Bemærk, at når impulserne givet ved $B$ flytter sig længere væk fra
+    origo, så stiger frekvensen i signalet. Dette er et godt eksempel på
+    at lave frekvenser findes omkring origo, mens høje frekvenser findes
+    i yderpunkterne.
+    }
+    \label{signal_10_20_8_16}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \subfloat[Signal i frekvensdomænet]{\label{freq_0_50_4}\includegraphics[angle=0,width=0.45\textwidth]{images/freq_0_50_4}\hspace{1em}}
+    \subfloat[Signal i tidsdomænet]{\label{time_0_50_4}\includegraphics[angle=0,width=0.45\textwidth]{images/time_0_50_4}}
+    \caption[]{To forskellige repræsentationer af signalet genereret ved
+    at sætte $A = 0, B = 50$ og $T = 4$. Her skal tallene på y-aksen
+    bemærkes. I tidsdomænet har vi større amplitude og sinusbølgen har
+    midte på x-aksen.}
+    \label{signal_0_50_4}
+\end{figure}
+
 \begin{lstlisting}[caption={Invers Fouriertransformation i MATLAB og
+    plot af signaler
     (kommandoprompt)}, captionpos=b,
     label={ifft_matlab}, float=t]
 >> close all;                               % Good meassure
 >> A = 10; B = 20; T = 4;                   % Init parameters
 >> F = DAImpulses(A, B, T);                 % Create impulses
 >> f = real(ifft(F));                       % Inverse Fourier transform
->> figure(1); plot(f);                      % Plot inverse transform
->> figure(2); stem(F);                      % Plot impulses
+>> figure(1); stem(F);                      % Plot impulses
+>> figure(2); plot(f);                      % Plot inverse transform
 
 \end{lstlisting}
 
