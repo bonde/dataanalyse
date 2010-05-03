@@ -45,7 +45,9 @@ hvid firkant på en sort baggrund.
 Vi vil nu gerne finde billedets Fouriertransformation og vise det med og
 uden translation af Origo til billedets midte. Fremgangsmåden er vist i
 kodeboks \ref{fft_matlab} og de resulterende billeder er vist i figur
-\ref{ffts}. Der ses
+\ref{ffts}. I begge fremstillinger ses et tydeligt mønster, men først
+når Origo translateres til midten bliver selve $sinc$-funktionen
+åbenlys.
 
 \begin{lstlisting}[caption={Fouriertransformation i MATLAB},
     captionpos=b, label={fft_matlab}, float=t, numbers=none]
@@ -73,6 +75,48 @@ figure; imshow(log(abs(fftshift(fft2(I)))), cmap);
     \label{ffts}
 \end{figure}
 
+Vi ønsker nu at filtrere billedet med et ideelt lav-pas-filter. Dette er
+ligetil at gøre i frekvensdomænet, da vi blot kan skære de uønskede
+frekvenser væk. Til filtrering er der vedlagt to MATLAB programmer.
+\texttt{DAIdealFilter} opretter og returner det ideelle filter. Filteret
+er defineret i frekvensdomænet og er blot en hvid cirkel som angiver
+hvilke frekvenser vi lader passere.
+
+Vi kan folde billedet og filteret i steddomænet ved at lave punktvis
+multiplikation i frekvensdomænet. \texttt{DAFilterF} gør dette lettere,
+da denne funktion tager et billede og et frekvensfilter. Herefter
+Fouriertransformeres billedet og Origo translateres til midten. Nu
+udføres den punktvise multiplikation og resultatets Origo translateres
+tilbage. Endeligt laves den inverse Fouriertransformation på resultatet.
+Billedet er nu blevet filteret med det givne filter.
+
+I figur \ref{ideal_filter} er det vist og forklaret hvodan filtrering
+med idealfilteret påvirker billedet.
+
+\begin{figure}[!h]
+    \centering
+    \subfloat[Filter med $D_0 = 64$.]{\label{ideal_filter_64}\includegraphics[angle=0,width=0.30\textwidth]{images/ideal_filter_64}}\hspace{1em}
+    \subfloat[Filtreret frekvensdomæne]{\label{ideal_fft_64}\includegraphics[angle=0,width=0.30\textwidth]{images/ideal_fft_64}}\hspace{1em}
+    \subfloat[Filtreret billede]{\label{ideal_64}\includegraphics[angle=0,width=0.30\textwidth]{images/ideal_64}}\\
+    \subfloat[Filter med $D_0 = 32$.]{\label{ideal_filter_32}\includegraphics[angle=0,width=0.30\textwidth]{images/ideal_filter_32}}\hspace{1em}
+    \subfloat[Filtreret frekvensdomæne]{\label{ideal_fft_32}\includegraphics[angle=0,width=0.30\textwidth]{images/ideal_fft_32}}\hspace{1em}
+    \subfloat[Filtreret billede]{\label{ideal_32}\includegraphics[angle=0,width=0.30\textwidth]{images/ideal_32}}\\
+    \subfloat[Filter med $D_0 = 64$.]{\label{ideal_filter_16}\includegraphics[angle=0,width=0.30\textwidth]{images/ideal_filter_16}}\hspace{1em}
+    \subfloat[Filtreret frekvensdomæne]{\label{ideal_fft_16}\includegraphics[angle=0,width=0.30\textwidth]{images/ideal_fft_16}}\hspace{1em}
+    \subfloat[Filtreret billede]{\label{ideal_16}\includegraphics[angle=0,width=0.30\textwidth]{images/ideal_16}}
+    \caption[]{Tre forskellige filtreringer med idealfilteret med
+    $D_0$ sat til hhv. 64, 32 og 16. Ved første filter ses det allerede
+    at de skarpe kontraster udlignes ved brug af idealfilteret. Kanterne
+    på firkanten bliver slørede og der ses ring-effekt. Dette
+    intensiveres når $D_0$ bliver mindre, dvs. vi skærer flere høje
+    frekvenser væk. Det ses at meget at billedeinformationen ligger i de
+    lave frekvenser, da vi ved en lille værdi af $D_0$ stadig har en god
+    fornemmelse af hvad billedet forestiller. Til at illustrere dette
+    kunne man godt have brugt et andet billede.}
+    \label{ideal_filter}
+\end{figure}
+\clearpage
+
 \subsection*{Spørgsmål 2}
 
 
@@ -83,7 +127,6 @@ figure; imshow(log(abs(fftshift(fft2(I)))), cmap);
 %\bibliography{bibliography}
 %\addcontentsline{toc}{chapter}{Litteratur}
 
-\clearpage
 \appendix
 \lstset{language=Matlab, basicstyle=\scriptsize,
     showstringspaces=false, numbers=left, stepnumber=1,
