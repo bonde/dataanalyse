@@ -82,13 +82,13 @@ frekvenser væk. Til filtrering er der vedlagt to MATLAB programmer.
 er defineret i frekvensdomænet og er blot en hvid cirkel som angiver
 hvilke frekvenser vi lader passere.
 
-Vi kan folde billedet og filteret i steddomænet ved at lave punktvis
-multiplikation i frekvensdomænet. \texttt{DAFilterF} gør dette lettere,
-da denne funktion tager et billede og et frekvensfilter. Herefter
-Fouriertransformeres billedet og Origo translateres til midten. Nu
-udføres den punktvise multiplikation og resultatets Origo translateres
-tilbage. Endeligt laves den inverse Fouriertransformation på resultatet.
-Billedet er nu blevet filteret med det givne filter.
+Vi kan folde billedet og filteret i steddomænet, ved at lave punktvis
+multiplikation i frekvensdomænet. \texttt{DAFilterF} gør dette lettere.
+Den tager et billede og et frekvensfilter. Herefter Fouriertransformeres
+billedet, mens filterets Origo translateres til øverste højere hjørne.
+Nu udføres den punktvise multiplikation og vi kan returnere den inverse
+Fouriertransformation. Billedet er nu blevet filtreret med det givne
+filter.
 
 I figur \ref{ideal_filter} er det vist og forklaret hvodan filtrering
 med idealfilteret påvirker billedet.
@@ -101,7 +101,7 @@ med idealfilteret påvirker billedet.
     \subfloat[Filter med $D_0 = 32$.]{\label{ideal_filter_32}\includegraphics[angle=0,width=0.30\textwidth]{images/ideal_filter_32}}\hspace{1em}
     \subfloat[Filtreret frekvensdomæne]{\label{ideal_fft_32}\includegraphics[angle=0,width=0.30\textwidth]{images/ideal_fft_32}}\hspace{1em}
     \subfloat[Filtreret billede]{\label{ideal_32}\includegraphics[angle=0,width=0.30\textwidth]{images/ideal_32}}\\
-    \subfloat[Filter med $D_0 = 64$.]{\label{ideal_filter_16}\includegraphics[angle=0,width=0.30\textwidth]{images/ideal_filter_16}}\hspace{1em}
+    \subfloat[Filter med $D_0 = 16$.]{\label{ideal_filter_16}\includegraphics[angle=0,width=0.30\textwidth]{images/ideal_filter_16}}\hspace{1em}
     \subfloat[Filtreret frekvensdomæne]{\label{ideal_fft_16}\includegraphics[angle=0,width=0.30\textwidth]{images/ideal_fft_16}}\hspace{1em}
     \subfloat[Filtreret billede]{\label{ideal_16}\includegraphics[angle=0,width=0.30\textwidth]{images/ideal_16}}
     \caption[]{Tre forskellige filtreringer med idealfilteret med
@@ -118,7 +118,105 @@ med idealfilteret påvirker billedet.
 \clearpage
 
 \subsection*{Spørgsmål 2}
+Vi er givet temperaturmålinger for hver time i 2009. Temperaturene er
+vist i plottet i figur \ref{temp}.
 
+\begin{figure}[!h]
+    \centering
+    \includegraphics[angle=0,width=0.80\textwidth]{images/temp}
+    \caption[]{Data fra filen \texttt{temp.mat}.}
+    \label{temp}
+\end{figure}
+
+Fra plottet i figur \ref{temp} er det svært at sige noget om hvorvidt
+signalet har periodiske strukturer, men man må antage at der vil være en
+vis struktur mht. svingningen mellem dag- og nattetemperaturen. Det er
+derfor interessant at kigge på det Fouriertransformerede signal som er
+vist i figur \ref{ftemp}. I frekvensdomænet kan vi finde op til flere
+symmetriske udslag som antyder periodiske strukturer i signalet.
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[angle=0,width=0.80\textwidth]{images/ftemp}
+    \caption[]{Fouriertransformationen af temperaturmålinger. Der ses op
+    til flere symmetriske maxima som antyder periodiske strukturer i
+    signalet. Tydeligst er de to omkring Origo.}
+    \label{ftemp}
+\end{figure}
+
+Vedlagt i bilag findes programmet \texttt{TempFilter} som giver mulighed
+for at manipulere signalets frekvensdomæne. Ved at eksekvere kommandoen
+\texttt{TempFilter(true)} kan man interaktivt klikke på de steder hvor
+man ønsker at sætte signalet til 0. På denne måde kan man forsøge at
+eliminere periodiske strukturer.
+
+I praksis går det dog ikke så godt. At finde netop den frekvens som
+udgør svingingen mellem nat- dagtemperatur er ikke lykkedes. I figur
+\ref{temp_cut} er blot et af de utallige forsøg på at finde denne
+frekvens vist.
+
+Programmet kan også kaldes med argumentet \texttt{false} hvilket ikke
+giver interaktiv filtrering. Derimod smides et ideelt lav-pas-filter
+over signalet. Vi kommer nu tættere på at eliminere forskellen mellem
+dag og nat. Resultatet er vist og videre kommenteret i figur
+\ref{temp_low}.
+
+Endeligt kan man ved en snedig udkommentering i linie 31 folde signalet
+med en Gaussisk kerne. Dette er vist i figur \ref{temp_gauss}.
+Umiddelbart giver denne filtrering af signalet det bedste resultat,
+selvom de andre sikkert kan forbedres til en vis grad ved at justere
+lidt på parametre og filtreringsområde.
+
+\begin{figure}[!h]
+    \centering
+    \subfloat[Signal over en
+    uge]{\label{temp_cut_1week}\includegraphics[angle=0,width=0.45\textwidth]{images/temp_cut_1week}}\hspace{1em}
+    \subfloat[Signal over 4
+    uger]{\label{temp_cut_4week}\includegraphics[angle=0,width=0.45\textwidth]{images/temp_cut_4week}}\\
+    \subfloat[Modificeret
+    frekvensdomæne]{\label{ftemp_cut}\includegraphics[angle=0,width=0.45\textwidth]{images/ftemp_cut}}
+    \caption[]{De to maxima omkring Origo er skåret ud. Den blå kurve
+    viser det originale signal, mens den røde er det filtrerede signal.
+    Modifikationen i frekvensdomænet har kun ringe effekt på signalet og
+    der er ingen antydning om at denne frekvens skulle være udsvinget
+    mellem nat og dag.}
+    \label{temp_cut}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \subfloat[Signal over en
+    uge]{\label{temp_low_1week}\includegraphics[angle=0,width=0.45\textwidth]{images/temp_low_1week}}\hspace{1em}
+    \subfloat[Signal over 4
+    uger]{\label{temp_low_4week}\includegraphics[angle=0,width=0.45\textwidth]{images/temp_low_4week}}\\
+    \subfloat[Modificeret
+    frekvensdomæne]{\label{ftemp_low}\includegraphics[angle=0,width=0.45\textwidth]{images/ftemp_low}}
+    \caption[]{Meget groft idealt lav-pas-filter (med $D_0 = 150$).
+    Selvom filteret er groft virker det nu meget godt. Der fjernes dog
+    lidt for meget information og man kan i den grad sige at forskellen
+    mellem nat og dag er blevet fjernet. Dette er et godt eksempel på
+    hvor meget information der faktisk ligger i de lave frekvenser. Man
+    skal dog være påpasselig med at bruge dette resultat på grund af
+    idealfilteret og dets bieffekter (som vist i del 1).}
+    \label{temp_low}
+\end{figure}
+
+\begin{figure}[!h]
+    \centering
+    \subfloat[Signal over en
+    uge]{\label{temp_gauss_1week}\includegraphics[angle=0,width=0.45\textwidth]{images/temp_gauss_1week}}\hspace{1em}
+    \subfloat[Signal over 4
+    uger]{\label{temp_gauss_4week}\includegraphics[angle=0,width=0.45\textwidth]{images/temp_gauss_4week}}\\
+    \subfloat[Modificeret
+    frekvensdomæne]{\label{ftemp_gauss}\includegraphics[angle=0,width=0.45\textwidth]{images/ftemp_gauss}}
+    \caption[]{Signal foldet med en Gaussisk kerne med $\sigma = 3$. Det
+    ses at signalet nu nærmer sig noget vi faktisk er interesseret i. De
+    mindre udsving mellen nat og dag er blevet jævnet ud, men vi holder
+    os overordnet set til kurven.}
+    \label{temp_gauss}
+\end{figure}
+
+\clearpage
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Formal stuff
@@ -141,6 +239,9 @@ undgå eventuelle sammenstød med indbyggede funktioner i MATLAB.
 
 \subsection{DAFilterF.m}
 \lstinputlisting{../src/DAFilterF.m}
+
+\subsection{TempFilter.m}
+\lstinputlisting{../src/TempFilter.m}
 
 \end{document}
 
