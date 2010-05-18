@@ -1,0 +1,113 @@
+\documentclass[a4paper, 11pt, danish, final]{article}
+\usepackage{bonde}
+
+\def\mytitle{Dataanalyse 2010}
+\def\mysubtitle{Aflevering af ugeopgave 3}
+\def\myauthor{Ulrik Bonde}
+\def\mymail{\mailto{bonde@diku.dk}}
+\def\mydate{\today}
+\def\repository{\url{http://github.com/bonde/dataanalyse}}
+
+\title{\mytitle}
+\subtitle{\mysubtitle}
+
+\author{\myauthor{} - \mymail}
+\date{\mydate}
+
+\hypersetup{
+colorlinks,%
+citecolor=black,%
+filecolor=black,%
+linkcolor=black,%
+urlcolor=black,%
+bookmarksopen=false,
+pdftitle={\mytitle{} - \mysubtitle},
+pdfauthor={\myauthor}
+}
+
+\begin{document}
+\maketitle
+
+\subsection*{Spørgsmål 1}
+\paragraph{Ligefordeling}
+Hvis vi antager at vægten af \emph{middelstore} strandsten i
+Jammerbugten er ligefordelt, medfører dette at man må forvente at der er
+lige mange sæt af sten som vejer det samme, lige mange sæt af sten hvor
+den ene er tungere end den anden og vice versa. Vi har altså taget hver
+sten og sammenlignet med enhver anden sten på stranden.
+
+Det er derfor også implicit, at der i Jammerbugten, er et uendeligt
+antal middelstore strandsten. Denne antagelse er nok heller ikke helt
+urimelig, da større strandsten på et eller andet tidspunkt vil blive
+middelstore pga.  erosion og andre naturfænomener som jeg ikke har
+videre forstand på. Derfor er selve spørgsmålet, et eller andet sted,
+ret dumt, da stenenes vægt ikke er konstant. Dog kan vi ved antagelsen
+om ligefordeling se bort fra dette faktum, men vi siger da heller ikke
+andet, end at ``der er ret mange middelstore strandsten i
+Jammerbugten''.
+
+\paragraph{Empirisk}
+Ved at beskrive de middelstore strandsten i Jammerbugten ved empiri
+tages et øjebliksbillede af stenene på stranden med en detajlegrad efter
+hvor mange prøver der tages.
+
+Vi kan af åbenlyse årsager ikke tage alle sten og sammenligne med enhver
+anden. Vi skal derfor overveje, om vi i vores stikprøver vil ligge sten
+tilbage hvis vi har brugt den i en sammenligning. Endvidere skal vi
+beslutte, om vi ved ligevægt skal have, at to sten vejer \emph{præcis}
+det samme eller om vi har en margin hvori vi godtager resultater.
+
+Der ligger dog stadig et stort arbejde i den empiriske fremgangsmåde, da
+hver sten skal vejes.
+
+\paragraph{Gæt}
+Ved gæt skal man overveje hvornår man gætter og på hvilket grundlag.
+Hvis der gættes uden overhovedet at have været i Jammerbugten og set de
+to pågældende sten, er det svært at stole på.
+
+Gættet kan også foretages blot ved at kigge på stenene uden at samle
+dem op. Her kan man da ikke længere være sikker på at stenen er
+middelstor, da dele af stenen kan være gemt i sandet.
+
+Endeligt kan man samle stenene op og vurdere vægten. Dette virker
+umiddelbart som det mest troværdige resultat ved brug af gæt.
+
+\paragraph{Statistisk uafhængighed}
+Jeg mener ikke at det er fornuftigt at antage statistisk uafhængighed,
+da vi kun betragter \emph{middelstore} sten. Vi derfor allerførst
+overveje hvornår en sten er middelstor. Rokkestenen på Bornholm kan godt
+siges at være middelstor i sammenligning med Ayers Rock i Australien. Om
+ikke andet sammenlignes kun sten med omtrent samme størrelse, hvilket
+gør statistisk uafhængighed besværligt. Vælges en ``større middelstor
+sten'' vil man også sammenligne denne med en tilsvarende ``stor
+middelstor sten''.
+
+\subsection*{Spørgsmål 2}
+Vi skal afgøre hvorvidt det givne kryptosystem er perfekt ved at
+evaluere $P(x|y) = P(x)$ for alle $x \in \mathcal{P}$ og $y \in
+\mathcal{C}$.
+
+Hvis vi sætter $x = a$ og $y = 1$ skal vi altså have opfyldt ligningen
+\begin{align}
+    P(a|1) &= P(a)
+\end{align}
+Ved at studere kryptotabellen, ser vi, at man med $y = 1$ er sikker på
+at $x = a$ og vi får da
+\begin{align}
+    P(a|1) &= \frac{1}{4}\\
+    1 &= \frac{1}{4}
+\end{align}
+hvilket er en modstrid. Kryptosystemet er altså ikke perfekt.
+Ovenstående er også gældende for $x = b$ og $y = 4$. Her er man også
+sikker på at den krypterede besked har været \texttt{b}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Formal stuff
+
+%\bibliographystyle{abbrvnat}
+%\bibliography{bibliography}
+%\addcontentsline{toc}{chapter}{Litteratur}
+
+\end{document}
+
+% vim: set tw=72 spell spelllang=da:

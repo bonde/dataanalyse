@@ -1,6 +1,8 @@
 # The following file patterns will be ignored by git
+assignments/images/*
 images/*
 docs/*
+assignments/*.TXT
 *.swp
 *.log
 *.out
